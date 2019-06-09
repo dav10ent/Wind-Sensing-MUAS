@@ -34,8 +34,14 @@ void setup() {
 }
 
 void loop() { 
-    channel = pulseIn(4,HIGH);
-    if (channel > 1800)
+  
+    channel = pulseIn(2,HIGH);
+    digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
+    delay(1000);               // wait for a second
+    digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
+    delay(1000);       
+     
+    while (channel > 1800)
     {
       digitalWrite(led, HIGH); 
       Serial.print("Time: ");
@@ -84,5 +90,8 @@ void loop() {
    delay(1);        // delay in between reads for stability
 }
 }
+
+
+
 
 
