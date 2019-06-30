@@ -1,0 +1,31 @@
+byte directionPin = 9;
+byte stepPin = 8;
+int numberOfSteps = 25;
+byte ledPin = 13;
+int pulseWidthMicros = 20;  // microseconds
+int millisbetweenSteps = 250;
+
+void setup() {
+  delay(10000);
+  // put your setup code here, to run once:
+  pinMode(directionPin, OUTPUT);
+  pinMode(stepPin, OUTPUT);
+  stepCCWsetup();
+  
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+}
+
+void stepCCWsetup(){
+  digitalWrite(directionPin, LOW);
+  for(int n = 0; n < numberOfSteps; n++) {
+    digitalWrite(stepPin, HIGH);
+    delayMicroseconds(pulseWidthMicros); // this line is probably unnecessary
+    digitalWrite(stepPin, LOW);
+    
+    delay(millisbetweenSteps);
+  }
+}
