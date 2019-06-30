@@ -1,3 +1,5 @@
+// Use with PLX DAQ V2.11. Install file, open PLX spreadsheet and then connect through the DAQ interface. 
+
 #include <Servo.h>
 
 Servo pitch;
