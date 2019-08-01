@@ -27,8 +27,8 @@ extern "C" {
 #define SLAVE_ADDR 0x28
 #define OUTPUT_MIN 0
 #define OUTPUT_MAX 0x3fff       // 2^14 - 1
-#define PRESSURE_MIN 0.0        // min is 0 for sensors that give absolute values
-#define PRESSURE_MAX 206842.7   // 30psi (and we want results in pascals)
+#define PRESSURE_MIN -249.08890833333         // min is 0 for sensors that give absolute values
+#define PRESSURE_MAX 249.08890833333   // 30psi (and we want results in pascals)
 
 uint32_t prev = 0; 
 const uint32_t interval = 0.0001;
@@ -239,7 +239,7 @@ void loop()
               myFile.close();
         }
 
-  delay(1);
+  delay(0.002);
 
       }
   }
