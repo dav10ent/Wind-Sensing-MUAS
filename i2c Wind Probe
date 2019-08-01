@@ -72,7 +72,7 @@ void setup()
  
 void loop() 
 {
-  tcaselect(0);
+  tcaselect(4);
   unsigned long now = millis();
   struct cs_raw ps;
   char p_str[10], t_str[10];
@@ -108,14 +108,11 @@ void loop()
           // floats cannot be easily printed out
           dtostrf(p, 2, 2, p_str);
           dtostrf(t, 2, 2, t_str);
-          Serial.print(prev);
-          Serial.print("  ");
-          Serial.println(p_str);
           
   tcaselect(2);
   unsigned long now = millis();
   struct cs_raw ps;
-  char p_str[10], t_str[10];
+  char p_str1[10], t_str[10];
   uint8_t el;
   float p, t;
   if ((now - prev > interval) && (Serial.available() <= 0)) {
@@ -146,17 +143,110 @@ void loop()
           ps_convert(ps, &p, &t, OUTPUT_MIN, OUTPUT_MAX, PRESSURE_MIN,
                  PRESSURE_MAX);
           // floats cannot be easily printed out
-          dtostrf(p, 2, 2, p_str);
+          dtostrf(p, 2, 2, p_str1);
           dtostrf(t, 2, 2, t_str);
-          Serial.print(prev);
-          Serial.print("  ");
-          Serial.println(p_str);
-          
 
-  delay(500);
+          
+  tcaselect(2);
+  unsigned long now = millis();
+  struct cs_raw ps;
+  char p_str2[10], t_str[10];
+  uint8_t el;
+  float p, t;
+  if ((now - prev > interval) && (Serial.available() <= 0)) {
+      prev = now;
+      el = ps_get_raw(SLAVE_ADDR, &ps);
+        // for some reason my chip triggers a diagnostic fault
+        // on 50% of powerups without a notable impact 
+        // to the output values.
+      if ( el == 4 ) {
+          Serial.println("err sensor missing");
+      } else {
+          if ( el == 3 ) {
+              Serial.print("err diagnostic fault ");
+              Serial.println(ps.status, BIN);
+          }
+          if ( el == 2 ) {
+              // if data has already been feched since the last
+              // measurement cycle
+              Serial.print("warn stale data ");
+              Serial.println(ps.status, BIN);
+          }
+          if ( el == 1 ) {
+              // chip in command mode
+              // no clue how to end up here
+              Serial.print("warn command mode ");
+              Serial.println(ps.status, BIN);
+          }
+          ps_convert(ps, &p, &t, OUTPUT_MIN, OUTPUT_MAX, PRESSURE_MIN,
+                 PRESSURE_MAX);
+          // floats cannot be easily printed out
+          dtostrf(p, 2, 2, p_str2);
+          dtostrf(t, 2, 2, t_str);
+          
+  tcaselect(3);
+  unsigned long now = millis();
+  struct cs_raw ps;
+  char p_str3[10], t_str[10];
+  uint8_t el;
+  float p, t;
+  if ((now - prev > interval) && (Serial.available() <= 0)) {
+      prev = now;
+      el = ps_get_raw(SLAVE_ADDR, &ps);
+        // for some reason my chip triggers a diagnostic fault
+        // on 50% of powerups without a notable impact 
+        // to the output values.
+      if ( el == 4 ) {
+          Serial.println("err sensor missing");
+      } else {
+          if ( el == 3 ) {
+              Serial.print("err diagnostic fault ");
+              Serial.println(ps.status, BIN);
+          }
+          if ( el == 2 ) {
+              // if data has already been feched since the last
+              // measurement cycle
+              Serial.print("warn stale data ");
+              Serial.println(ps.status, BIN);
+          }
+          if ( el == 1 ) {
+              // chip in command mode
+              // no clue how to end up here
+              Serial.print("warn command mode ");
+              Serial.println(ps.status, BIN);
+          }
+          ps_convert(ps, &p, &t, OUTPUT_MIN, OUTPUT_MAX, PRESSURE_MIN,
+                 PRESSURE_MAX);
+          // floats cannot be easily printed out
+          dtostrf(p, 2, 2, p_str3);
+          dtostrf(t, 2, 2, t_str);
+          Serial.print(p_str);
+          Serial.print("  ");
+          Serial.print(p_str1);
+          Serial.print("  ");
+          Serial.print(p_str2);
+          Serial.print("  ");
+          Serial.println(p_str3);
+          myFile=SD.open("data.csv", FILE_WRITE);
+            if(myFile){
+              myFile.print(p_str);
+              myFile.print(",");
+              myFile.print(p_str1);
+              myFile.print(",");
+              myFile.print(p_str2);  
+              myFile.print(",");
+              myFile.println(p_str3); 
+              myFile.close();
+        }
+
+  delay(1);
 
       }
   }
   }
+  }
+}
+  }
+      }
   }
 }
