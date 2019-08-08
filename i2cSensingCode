@@ -1,9 +1,3 @@
-/**
- * TCA9548 I2CScanner.pde -- I2C bus scanner for Arduino
- *
- * Based on code c. 2009, Tod E. Kurt, http://todbot.com/blog/
- *
- */
 
 #include <SD.h>
 #include <SPI.h>
