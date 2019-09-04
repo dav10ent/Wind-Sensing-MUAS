@@ -2,13 +2,33 @@
 
 #include <SD.h>
 #include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BME280.h>
 
+#define BME_SCK 13
+#define BME_MISO 12
+#define BME_MOSI 11
+#define BME_CS 10
+
+#define SEALEVELPRESSURE_HPA (1013.25)
+
+Adafruit_BME280 bme;
 File myFile;
 const int chipSelect = BUILTIN_SDCARD;
 unsigned long time;
 int led = 13;
 
+unsigned long delayTime;
+
 void setup() {
+    unsigned status;
+    status = bme.begin(); 
+    delayTime = 1000;
+    Serial.println();
+}
+  
+  
   pinMode(led, OUTPUT);    
   Serial.begin(57600);
   // while (!Serial) {
@@ -35,46 +55,17 @@ void loop() {
   digitalWrite(led, HIGH); 
   Serial.print("Time: ");
   time = millis();
-
   
-  int sensorValue = analogRead(A0);
-  int sensorValue2 = analogRead(A1);
-  int sensorValue3 = analogRead(A2);
-  int sensorValue4 = analogRead(A3);
-  
-  float sensor=sensorValue; 
-  float sensor2=sensorValue2;
-  float sensor3=sensorValue3;
-  float sensor4=sensorValue4;
-  
-  float voltage=(sensorValue/1024.00)*3.3;
-  float voltage2=(sensorValue2/1024.00)*3.3;
-  float voltage3=(sensorValue3/1024.00)*3.3;
-  float voltage4=(sensorValue4/1024.00)*3.3;
-  float pressurediff=10.0;
-
-  Serial.println(time); //prints time since program started
-  Serial.print(",");  
-  Serial.print(voltage);
-  Serial.print(",");
-  Serial.print(voltage2);
-  Serial.print(",");
-  Serial.print(voltage3);
-  Serial.print(",");
-  Serial.println(voltage4);  
-
+  Serial.print("Temperature = ");
+  Serial.print(bme.readTemperature());
+  Serial.println(" *C");
+  temperature=bme.readTemperature();
  
   myFile=SD.open("data.csv", FILE_WRITE);
   if(myFile){
    myFile.print(time);
    myFile.print(",");
-   myFile.print(sensorValue);
-   myFile.print(",");
-   myFile.print(sensorValue2);
-   myFile.print(",");
-   myFile.print(sensorValue3);  
-   myFile.print(",");
-   myFile.println(sensorValue4); 
+   myFile.println(temperature);
    myFile.close();
   }
   delay(1);        // delay in between reads for stability
