@@ -1,2 +1,2 @@
 # Wind-Sensing-MUAS
-Code for wind sensing multi-rotor
+Tasks for the Wind Sensing Aircraft 
